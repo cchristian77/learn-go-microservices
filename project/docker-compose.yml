@@ -1,0 +1,20 @@
+version: "3"
+
+# Run docker compose
+# cd to project folder
+# run : docker compose up -d
+
+services:
+
+  broker-service:
+    build:
+      context: ./../broker-service
+      dockerfile: ./../broker-service/broker-service.dockerfile
+    restart: always
+    ports:
+      - "8080:80"
+    deploy:
+      # allowed to have 1 replica
+      # because localhost only listens port 8080 on the localhost
+      mode: replicated
+      replicas: 1
