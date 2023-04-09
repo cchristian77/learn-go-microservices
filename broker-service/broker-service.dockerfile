@@ -10,7 +10,7 @@ WORKDIR /app
 
 # Not using any C libraries
 # build broker-service app
-RUN CGO_ENABLED=0 go build -o brokderApp ./cmd/api
+RUN CGO_ENABLED=0 go build -o brokerApp ./cmd/api
 
 # add executable flag
 RUN chmod +x /app/brokerApp
