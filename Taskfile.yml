@@ -11,6 +11,8 @@ vars:
   PROJECT_DIR: /project
   AUTH_BINARY: authApp
   AUTH_DIR: /authentication-service
+  LOGGER_BINARY: loggerServiceApp
+  LOGGER_DIR: /logger-service
 
 tasks:
 
@@ -29,6 +31,7 @@ tasks:
     cmds:
       - task: build_broker
       - task: build_auth
+      - task: build_logger
       - echo 'Stopping docker images (if running...)'
       - docker compose down
       - echo 'Building (when required) and starting docker images...'
@@ -51,6 +54,15 @@ tasks:
     cmds:
       - echo 'Building broker binary...'
       - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o {{.BROKER_BINARY}} ./cmd/api
+      - echo 'Done!'
+    silent: true
+
+  build_logger:
+    desc: builds the logger binary as a linux executable
+    dir: '{{.LOGGER_DIR}}'
+    cmds:
+      - echo 'Building logger binary...'
+      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o {{.LOGGER_BINARY}} ./cmd/api
       - echo 'Done!'
     silent: true
 
@@ -90,6 +102,3 @@ tasks:
       - taskkill /IM "{{.FRONT_END_BINARY}}" /F
       - echo 'Stopping front end...'
     silent: true
-
-
-

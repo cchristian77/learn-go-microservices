@@ -3,4 +3,6 @@
 /front-end/frontApp.exe
 /broker-service/brokerApp
 /authentication-service/authApp
+/logger-service/loggerServiceApp
+
 /project/db-data/
