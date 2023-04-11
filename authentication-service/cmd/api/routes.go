@@ -20,13 +20,8 @@ func (app *Config) routes() http.Handler {
 		MaxAge:           300,
 	}))
 
-	// making sure this service is alive by checking for its heartbeat
 	mux.Use(middleware.Heartbeat("/ping"))
 
-	mux.Post("/", app.Broker)
-
-	// a single entry to handle all requests regardless what microservice
-	mux.Post("/handle", app.HandleSubmission)
-
+	mux.Post("/authenticate", app.Authenticate)
 	return mux
 }

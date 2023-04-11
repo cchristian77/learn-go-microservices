@@ -9,6 +9,8 @@ vars:
   BROKER_BINARY: brokerApp
   BROKER_DIR: /broker-service
   PROJECT_DIR: /project
+  AUTH_BINARY: authApp
+  AUTH_DIR: /authentication-service
 
 tasks:
 
@@ -16,9 +18,9 @@ tasks:
     desc: starts all containers in the background without forcing build
     dir: '{{.PROJECT_DIR}}'
     cmds:
-      - echo Starting Docker images...
+      - echo 'Starting Docker images...'
       - docker compose up -d
-      - echo Docker images started!
+      - echo 'Docker images started!'
     silent: true
 
   up_build:
@@ -26,6 +28,7 @@ tasks:
     dir: '{{.PROJECT_DIR}}'
     cmds:
       - task: build_broker
+      - task: build_auth
       - echo 'Stopping docker images (if running...)'
       - docker compose down
       - echo 'Building (when required) and starting docker images...'
@@ -48,6 +51,15 @@ tasks:
     cmds:
       - echo 'Building broker binary...'
       - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o {{.BROKER_BINARY}} ./cmd/api
+      - echo 'Done!'
+    silent: true
+
+  build_auth:
+    desc: builds the auth binary as a linux executable
+    dir: '{{.AUTH_DIR}}'
+    cmds:
+      - echo 'Building auth binary...'
+      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o {{.AUTH_BINARY}} ./cmd/api
       - echo 'Done!'
     silent: true
 
