@@ -25,5 +25,8 @@ func (app *Config) routes() http.Handler {
 
 	mux.Post("/", app.Broker)
 
+	// a single entry to handle all requests regardless what microservice
+	mux.Post("/handle", app.HandleSubmission)
+
 	return mux
 }
