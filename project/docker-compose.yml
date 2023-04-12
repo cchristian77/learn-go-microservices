@@ -28,7 +28,7 @@ services:
       mode: replicated
       replicas: 1
 
-  mail-service:
+  mailer-service:
     build:
       context: ./../mail-service
       dockerfile: ./../mail-service/mail-service.dockerfile

@@ -5,6 +5,7 @@ import (
 	"github.com/vanng822/go-premailer/premailer"
 	mail "github.com/xhit/go-simple-mail/v2"
 	"html/template"
+	"log"
 	"time"
 )
 
@@ -68,6 +69,7 @@ func (m *Mail) SendSMTPMessage(msg Message) error {
 	// create a client and connect to that host
 	smtpClient, err := server.Connect()
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 
