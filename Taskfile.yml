@@ -15,6 +15,8 @@ vars:
   LOGGER_DIR: /logger-service
   MAIL_BINARY: mailerApp
   MAIL_DIR: /mail-service
+  LISTENER_BINARY: listenerApp
+  LISTENER_DIR: /listener-service
 
 tasks:
 
@@ -35,6 +37,7 @@ tasks:
       - task: build_auth
       - task: build_logger
       - task: build_mail
+      - task: build_listener
       - echo 'Stopping docker images (if running...)'
       - docker compose down
       - echo 'Building (when required) and starting docker images...'
@@ -84,6 +87,15 @@ tasks:
     cmds:
       - echo 'Building auth binary...'
       - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o {{.AUTH_BINARY}} ./cmd/api
+      - echo 'Done!'
+    silent: true
+
+  build_listener:
+    desc: builds the listener binary as a linux executable
+    dir: '{{.LISTENER_DIR}}'
+    cmds:
+      - echo 'Building listener binary...'
+      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o {{.LISTENER_BINARY}} .
       - echo 'Done!'
     silent: true
 

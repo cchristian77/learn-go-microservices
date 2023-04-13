@@ -2,19 +2,15 @@ package main
 
 import (
 	"fmt"
-	amqp "github.com/rabbitmq/amqp091-go"
+	"listener/event"
 	"log"
 	"math"
-	"net/http"
 	"os"
+
+	// amqp : Advanced Messaging Queue Protocol
+	amqp "github.com/rabbitmq/amqp091-go"
 	"time"
 )
-
-const webPort = "80"
-
-type Config struct {
-	Rabbit *amqp.Connection
-}
 
 func main() {
 	// try to connect to rabbitmq
@@ -25,22 +21,19 @@ func main() {
 	}
 	defer rabbitConn.Close()
 
-	app := Config{
-		Rabbit: rabbitConn,
-	}
+	// start listening for messages
+	log.Println("Listening for and consuming RabbitMQ messages...")
 
-	log.Printf("Starting broker service on port %s\n", webPort)
-
-	// define http server
-	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%s", webPort),
-		Handler: app.routes(),
-	}
-
-	// start the server
-	err = srv.ListenAndServe()
+	// create consumer (service that consumes messages from the queue)
+	consumer, err := event.NewConsumer(rabbitConn)
 	if err != nil {
-		log.Panic(err)
+		panic(err)
+	}
+
+	// watch the queue and consume events
+	err = consumer.Listen([]string{"log.INFO", "log.WArNING", "log.ERROR"})
+	if err != nil {
+		log.Println(err)
 	}
 }
 
@@ -53,7 +46,7 @@ func connect() (*amqp.Connection, error) {
 	for {
 		c, err := amqp.Dial("amqp://guest:guest@rabbitmq") // rabbitmq matches to service's name in docker composer
 		if err != nil {
-			log.Println("RabbitMQ not yet ready...")
+			fmt.Println("RabbitMQ not yet ready...")
 			counts++
 		} else {
 			log.Println("Connected to RabbitMQ!")

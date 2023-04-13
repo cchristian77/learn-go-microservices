@@ -4,6 +4,7 @@
 /broker-service/brokerApp
 /authentication-service/authApp
 /logger-service/loggerServiceApp
+/listener-service/listenerApp
+/mail-service/mailerApp
 
 /project/db-data/
-/mail-service/mailerApp
