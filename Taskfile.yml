@@ -13,6 +13,8 @@ vars:
   AUTH_DIR: /authentication-service
   LOGGER_BINARY: loggerServiceApp
   LOGGER_DIR: /logger-service
+  MAIL_BINARY: mailerApp
+  MAIL_DIR: /mail-service
 
 tasks:
 
@@ -32,6 +34,7 @@ tasks:
       - task: build_broker
       - task: build_auth
       - task: build_logger
+      - task: build_mail
       - echo 'Stopping docker images (if running...)'
       - docker compose down
       - echo 'Building (when required) and starting docker images...'
@@ -54,6 +57,15 @@ tasks:
     cmds:
       - echo 'Building broker binary...'
       - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o {{.BROKER_BINARY}} ./cmd/api
+      - echo 'Done!'
+    silent: true
+
+  build_mail:
+    desc: builds the mail binary as a linux executable
+    dir: '{{.MAIL_DIR}}'
+    cmds:
+      - echo 'Building mail binary...'
+      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o {{.MAIL_BINARY}} ./cmd/api
       - echo 'Done!'
     silent: true
 
