@@ -261,13 +261,14 @@ func (app *Config) logItemViaRPC(w http.ResponseWriter, l LogPayload) {
 
 func (app *Config) LogViaGRPC(w http.ResponseWriter, r *http.Request) {
 	var requestPayload RequestPayload
+
 	err := app.readJSON(w, r, &requestPayload)
 	if err != nil {
 		app.errorJSON(w, err)
 		return
 	}
 
-	conn, err := grpc.Dial("logger-serivce:50001", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
+	conn, err := grpc.Dial("logger-service:50001", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
 		app.errorJSON(w, err)
 		return
@@ -284,7 +285,6 @@ func (app *Config) LogViaGRPC(w http.ResponseWriter, r *http.Request) {
 			Data: requestPayload.Log.Data,
 		},
 	})
-
 	if err != nil {
 		app.errorJSON(w, err)
 		return
