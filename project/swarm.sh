@@ -1,7 +1,7 @@
 docker swarm init
 
 # add a worker to the swarm
-docker swarm join --token SWMTKN-1-338hhr2dls4jpmzuh1ik8w4ye9e1nzk15dl9tngc6c35u4at46-1ikcs2on9ksls3d8feua8jc38 192.168.65.4:2377
+docker swarm join --token SOME_TOKEN
 
 # add a manager to the swarm
 docker swarm join-token manager
@@ -51,4 +51,11 @@ docker stack rm myapp
 # leave the manager (worker node)
 docker swarm leave --force
 
+## Updating broker service
+task build_broker
+docker build -f broker-service.dockerfile -t urgood77/broker-service:1.0.1 .
 
+# Push front-end image
+docker build -f front-end.dockerfile -t urgood77/front-end:1.0.0 .
+
+docker push urgood77/front-end:1.0.0

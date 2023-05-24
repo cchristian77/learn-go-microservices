@@ -6,5 +6,6 @@
 /logger-service/loggerServiceApp
 /listener-service/listenerApp
 /mail-service/mailerApp
+/front-end/frontEndApp
 
 /project/db-data/
