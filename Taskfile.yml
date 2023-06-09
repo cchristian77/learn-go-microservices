@@ -39,6 +39,7 @@ tasks:
       - task: build_logger
       - task: build_mail
       - task: build_listener
+      - task: build_front_service
       - echo 'Stopping docker images (if running...)'
       - docker compose down
       - echo 'Building (when required) and starting docker images...'
@@ -115,9 +116,7 @@ tasks:
     dir: '{{.FRONT_END_DIR}}'
     cmds:
       - echo Building front end linux binary...
-      - set CGO_ENABLED=0
-      - set GOOS=windows
-      - go build -o {{.FRONT_END_SERVICE_BINARY}} ./cmd/web
+      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o {{.FRONT_END_SERVICE_BINARY}} ./cmd/web
     silent: true
 
   start:

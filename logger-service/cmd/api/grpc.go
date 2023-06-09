@@ -18,7 +18,7 @@ type LogServer struct {
 func (l *LogServer) WriteLog(ctx context.Context, req *logs.LogRequest) (*logs.LogResponse, error) {
 	input := req.GetLogEntry()
 
-	// write hte log
+	// write the log
 	logEntry := data.LogEntry{
 		Name: input.Name,
 		Data: input.Data,

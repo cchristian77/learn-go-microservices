@@ -42,7 +42,6 @@ docker service update --image urgood77/logger-service:1.0.1 myapp_logger-service
 docker service update --image urgood77/logger-service:1.0.0 myapp_logger-service
 
 ## Stop service
-
 docker service scale myapp_broker-service=0
 
 # stop the entire swarm
