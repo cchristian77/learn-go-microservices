@@ -17,6 +17,7 @@ vars:
   MAIL_DIR: /mail-service
   LISTENER_BINARY: listenerApp
   LISTENER_DIR: /listener-service
+  FRONT_END_SERVICE_BINARY: frontEndApp # frontend service
 
 tasks:
 
@@ -38,6 +39,7 @@ tasks:
       - task: build_logger
       - task: build_mail
       - task: build_listener
+      - task: build_front_service
       - echo 'Stopping docker images (if running...)'
       - docker compose down
       - echo 'Building (when required) and starting docker images...'
@@ -107,6 +109,14 @@ tasks:
       - set CGO_ENABLED=0
       - set GOOS=windows
       - go build -o {{.FRONT_END_BINARY}} ./cmd/web
+    silent: true
+
+  build_front_service:
+    desc: builds the front end as a linux executable
+    dir: '{{.FRONT_END_DIR}}'
+    cmds:
+      - echo Building front end linux binary...
+      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o {{.FRONT_END_SERVICE_BINARY}} ./cmd/web
     silent: true
 
   start:
